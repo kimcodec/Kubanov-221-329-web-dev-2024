@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>Author: {{ post.author }}</p>
+    <p>Date: {{ post.date }}</p>
+    <img class="img-fluid my-3 border" src="{{ url_for('static', filename='images/' + post.image_id) }}"
+         alt="Post Image">
+    <p>{{ post.text }}</p>
+
+    <form class="my-4">
+        <h4>Оставьте комментарий</h4>
+        <div class="form-group">
+            <textarea class="form-control" id="comment_text" name="comment_text" rows="4"
+                      placeholder="Enter your comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-1">Submit</button>
+    </form>
+
+    <div class="comments">
+        {% for comment in post.comments %}
+            <div class="comment">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <img class="comment_logo" src="{{ url_for('static', filename='images/commentLogo.jpg') }}"
+                             alt="Sample Image">
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5>{{ comment.author }}</h5>
+                        <p>{{ comment.text }}</p>
+                    </div>
+                </div>
+                <!-- Display replies if any -->
+                {% if comment.replies %}
+                    <div class="replies ms-5">
+                        {% for reply in comment.replies %}
+                            <div class="reply">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <img class="comment_logo"
+                                             src="{{ url_for('static', filename='images/commentLogo.jpg') }}"
+                                             alt="Sample Image">
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5>{{ reply.author }}</h5>
+                                        <p>{{ reply.text }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
