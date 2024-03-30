@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Форма ввода номера</h1>
+        <form method="post">
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Enter Phone Number</label>
+                <input type="text" class="form-control {% if errors %}is-invalid{% endif %}" id="phone_number"
+                       name="phone_number" value="{{ phone_number }}">
+                {% if errors %}
+                    <div class="invalid-feedback">
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Check</button>
+        </form>
+    </div>
+{% endblock %}
