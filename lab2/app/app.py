@@ -32,7 +32,6 @@ def url_params():
 def form():
     return render_template('form.html')
 
-
 @app.route('/phone', methods=['GET', 'POST'])
 def phone():
     if request.method == 'GET':
@@ -46,11 +45,12 @@ def phone():
 
     if not phone_number.isdigit():
         errors.append('В номере телефона встречаются недопустимые символы.')
-    if len(phone_number) not in [10, 11]:
-        errors.append('Неверное количество цифр.')
 
     if not errors:
-        formatted_phone_number = '8-{}-{}-{}-{}'.format(
+        if len(phone_number) not in [10, 11]:
+            errors.append('Неверное количество цифр.')
+        else:
+            formatted_phone_number = '8-{}-{}-{}-{}'.format(
             phone_number[-10:-7], phone_number[-7:-4], phone_number[-4:-2], phone_number[-2:]
         )
 
