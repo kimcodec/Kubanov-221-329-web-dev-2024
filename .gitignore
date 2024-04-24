@@ -45,4 +45,6 @@ Temporary Items
 .history
 .ionide
 
-ve
+ve/
+venv/
+migrate
