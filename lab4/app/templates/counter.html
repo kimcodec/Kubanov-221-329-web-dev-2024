@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>Вы посетили эту страницу {{ session.get('counter', 0) }} раз!</p>
+{% endblock %}
