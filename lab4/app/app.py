@@ -100,6 +100,7 @@ def users_delete(user_id):
     with db_connector.connect().cursor(row_factory=namedtuple_row) as cursor:
         query = "DELETE FROM users WHERE id = %s"
         cursor.execute(query, (user_id,))
+        db_connector.connect().commit()
         flash('Учетная запись успешно удалена', 'success')
     return redirect(url_for('users'))
 
@@ -152,15 +153,14 @@ def users_new():
             )
         with db_connector.connect().cursor(row_factory=namedtuple_row) as cursor:
             try:
-                query = (
-                    "INSERT INTO users (login, password_hash, first_name, middle_name, last_name, role_id) VALUES "
-                    "(%(login)s, CAST(SHA256(%(password)s) AS varchar), %(first_name)s, %(middle_name)s, "
-                    "%(last_name)s, %(role_id)s)"
-                )
+                query = str("INSERT INTO users (login, password_hash, first_name, middle_name, last_name, role_id) "
+                            "VALUES (%(login)s, CAST(SHA256(%(password)s) AS varchar), %(first_name)s, %(middle_name)s,"
+                            "%(last_name)s, %(role_id)s)")
                 cursor.execute(query, user_data)
+                db_connector.connect().commit()
                 flash('Учетная запись успешно создана', 'success')
                 return redirect(url_for('users'))
-            except psycopg.DatabaseError:
+            except psycopg.Error:
                 flash('Произошла ошибка при создании записи. Проверьте, что все необходимые поля заполнены', 'danger')
     return render_template('users_new.html', user_data=user_data, roles=get_roles(), errors={})
 
@@ -200,9 +200,10 @@ def users_edit(user_id):
                          "middle_name = %(middle_name)s, last_name = %(last_name)s, "
                          "role_id = %(role_id)s WHERE id = %(id)s")
                 cursor.execute(query, user_data)
+                db_connector.connect().commit()
                 flash('Учетная запись успешно изменена', 'success')
                 return redirect(url_for('users'))
-            except psycopg.DatabaseError:
+            except psycopg.Error:
                 flash('Произошла ошибка при изменении записи.', 'danger')
     return render_template('users_edit.html', user_data=user_data, roles=get_roles())
 
@@ -229,6 +230,7 @@ def change_password():
             if not errors['new_password'] and not errors['new_password']:
                 cursor.execute("UPDATE users SET password_hash = CAST(SHA256(%s) AS VARCHAR) WHERE id = %s",
                                (new_password, user_id))
+                db_connector.connect().commit()
                 flash("Вы успешно сменили пароль", "susses")
                 return redirect(url_for('users'))
     return render_template('change_password.html', errors=errors)

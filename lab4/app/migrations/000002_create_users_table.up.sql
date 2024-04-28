@@ -13,4 +13,4 @@ CREATE TABLE users
 );
 
 CREATE INDEX role_id
-    ON users(role_id);;
+    ON users(role_id);
