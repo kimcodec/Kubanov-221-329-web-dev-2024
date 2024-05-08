@@ -4,5 +4,5 @@
 
 {% block content %}
     <h1 class="mb-3">Изменение пользователя</h1>
-    {{ user_form(roles, 'edit', user_data) }}
+    {{ user_form(roles, 'edit', user_data, errors=errors) }}
 {% endblock %}

@@ -193,6 +193,7 @@ def users_view(user_id):
 @app.route('/users/<int:user_id>/edit', methods=['POST', 'GET'])
 @login_required
 def users_edit(user_id):
+    errors = {}
     with db_connector.connect().cursor(row_factory=namedtuple_row) as cursor:
         query = ("SELECT first_name, middle_name, last_name, role_id "
                  "FROM users WHERE id = %s")
@@ -204,6 +205,15 @@ def users_edit(user_id):
         if request.method == 'POST':
             fields = ('first_name', 'middle_name', 'last_name', 'role_id')
             user_data = {field: request.form[field] or None for field in fields}
+            errors['first_name'] = validate_name(user_data['first_name'])
+            errors['last_name'] = validate_name(user_data['last_name'])
+            if errors['first_name'] or errors['last_name']:
+                return render_template(
+                    'users_edit.html',
+                    user_data=user_data,
+                    roles=get_roles(),
+                    errors=errors
+                )
             user_data['id'] = user_id
             try:
                 query = ("UPDATE users SET first_name = %(first_name)s, "
