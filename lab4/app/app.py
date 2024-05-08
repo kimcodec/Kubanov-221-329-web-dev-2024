@@ -134,6 +134,14 @@ def validate_password(password):
     return errors
 
 
+def validate_name(name):
+    errors = []
+    if len(name) == 0:
+        errors.append("Имя не должно быть пустым")
+
+    return errors
+
+
 @app.route('/users/new', methods=['POST', 'GET'])
 @login_required
 def users_new():
@@ -144,7 +152,9 @@ def users_new():
         user_data = {field: request.form[field] or None for field in fields}
         errors['login'] = validate_login(user_data['login'])
         errors['password'] = validate_password(user_data['password'])
-        if errors['login'] or errors['password']:
+        errors['first_name'] = validate_name(user_data['first_name'])
+        errors['last_name'] = validate_name(user_data['last_name'])
+        if errors['login'] or errors['password'] or errors['first_name'] or errors['last_name']:
             return render_template(
                 'users_new.html',
                 user_data=user_data,
