@@ -136,7 +136,7 @@ def validate_password(password):
 
 def validate_name(name):
     errors = []
-    if len(name) == 0:
+    if name is None or len(name) == 0:
         errors.append("Имя не должно быть пустым")
 
     return errors
