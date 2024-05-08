@@ -210,7 +210,6 @@ def users_edit(user_id):
             if errors['first_name'] or errors['last_name']:
                 return render_template(
                     'users_edit.html',
-                    user_data=user_data,
                     roles=get_roles(),
                     errors=errors
                 )
@@ -225,7 +224,7 @@ def users_edit(user_id):
                 return redirect(url_for('users'))
             except psycopg.Error:
                 flash('Произошла ошибка при изменении записи.', 'danger')
-    return render_template('users_edit.html', user_data=user_data, roles=get_roles())
+    return render_template('users_edit.html', user_data=user_data, roles=get_roles(), errors=errors)
 
 
 @app.route('/change-password', methods=['GET', 'POST'])
