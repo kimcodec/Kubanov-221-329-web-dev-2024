@@ -210,6 +210,7 @@ def users_edit(user_id):
             if errors['first_name'] or errors['last_name']:
                 return render_template(
                     'users_edit.html',
+                    user_data=user_data,
                     roles=get_roles(),
                     errors=errors
                 )
