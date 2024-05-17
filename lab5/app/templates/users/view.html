@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Просмотр учетной записи</h1>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>Логин</td>
+            <td>{{ user_data.login }}</td>
+        </tr>
+        <tr>
+            <td>Имя</td>
+            <td>{{ user_data.first_name }}</td>
+        </tr>
+        <tr>
+            <td>Отчество</td>
+            <td>{{ user_data.middle_name or '' }}</td>
+        </tr>
+        <tr>
+            <td>Фамилия</td>
+            <td>{{ user_data.last_name }}</td>
+        </tr>
+        <tr>
+            <td>Роль</td>
+            <td>{{ user_role }}</td>
+        </tr>
+        <tr>
+            <td>Дата регистрации</td>
+            <td>{{ user_data.created_at }}</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

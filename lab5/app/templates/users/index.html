@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1> User List </h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> № </th>
+                <th> login </th>
+                <th> last_name </th>
+                <th> first_name </th>
+                <th> middle_name </th>
+                <th> role </th>
+                <th> created_at </th>
+                <th>  </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td> {{loop.index}} </td>
+                <td> {{user.login}} </td>
+                <td> {{user.last_name}} </td>
+                <td> {{user.first_name}} </td>
+                <td> {% if user.middle_name %} {{user.middle_name}} {% endif %}</td>
+                <td> {{user.role}}</td>
+                <td> {{user.created_at}} </td>
+                {% if current_user.is_authenticated %}
+                <td> 
+                    {% if current_user.can('read', user) %}<a class="btn btn-primary" href="{{ url_for('users.view', user_id=user.id) }}">View</a> {% endif %}
+                    {% if current_user.can('update', user) %}<a class="btn btn-primary" href="{{ url_for('users.edit', user_id=user.id) }}">Edit</a>  {% endif %}
+                    {% if current_user.can('delete', user) %}<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-user-id="{{ user.id }}">Delete</button> {% endif %}
+                </td> 
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if current_user.is_authenticated and current_user.can('create') %}
+    <a href="{{ url_for('users.new') }}" class="btn btn-primary">Добавить пользователя</a>
+    {% endif %}
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление учетной записи</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Вы уверены, что хотите удалить данную учетную запись?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+              <form method="post" id="deleteModalForm">
+                <button type="submit" class="btn btn-danger">Удалить</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>         
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='user_delete_modal.js') }}"></script>
+{% endblock %}

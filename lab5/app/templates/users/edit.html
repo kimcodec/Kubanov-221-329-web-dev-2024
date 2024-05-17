@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% from 'users/form.html' import user_form %}
+
+{% block content %}
+    <h1 class="mb-3">Изменение пользователя</h1>
+    {{ user_form(roles, 'edit', current_user, user_data) }}
+{% endblock %}

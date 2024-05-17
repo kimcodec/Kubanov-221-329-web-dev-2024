@@ -1,0 +1,33 @@
+{% extends 'user_actions/base.html' %}
+
+{% block user_actions_content %}
+<h1> Статистика посещений по пользователям </h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th> № </th>
+            <th> last_name </th>
+            <th> first_name </th>
+            <th> middle_name </th>
+            <th> entries_count </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users_stats %}
+        <tr>
+            <td> {{loop.index}} </td>
+            {% if user.last_name is not none %}
+            <td>  {{user.last_name}} </td>
+            <td> {{user.first_name}} </td>
+            {% else %}
+            <td> Неаутентифицированный </td>
+            <td> пользователь </td>
+            {% endif %}
+            <td> {% if user.middle_name %} {{user.middle_name}} {% endif %}</td>
+            <td> {{user.entries_counter}} </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a class="btn btn-primary" href="{{ url_for('user_actions.user_export') }}">Экспорт</a>
+{% endblock %}

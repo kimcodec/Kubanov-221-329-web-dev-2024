@@ -1,0 +1,25 @@
+{% extends 'user_actions/base.html' %}
+
+{% block user_actions_content %}
+<h2>Статистика посещений страниц</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>Страница</th>
+            <th>Количество посещений</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for page in pages_stats %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ page.path }}</td>
+            <td>{{ page.visits_count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('user_actions.pages_export') }}" class="btn btn-primary">Экспорт в CSV</a>
+{% endblock %}

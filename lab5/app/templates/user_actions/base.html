@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if request.endpoint == 'user_actions.index' %} active {% endif %}" aria-current="page"
+               href="{{ url_for('user_actions.index') }}">Журнал действий</a>
+        </li>
+        {% if current_user.is_authenticated and current_user.can('read_statistics', current_user) %}
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'user_actions.users_stats' %} active {% endif %}"
+                   href="{{ url_for('user_actions.users_stats') }}">Статистика по пользователям</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.endpoint == 'user_actions.paths_stats' %} active {% endif %}"
+                   href="{{ url_for('user_actions.pages_stats') }}">Статистика по страницам</a>
+            </li>
+        {% endif %}
+    </ul>
+    {% block user_actions_content %}
+    {% endblock %}
+{% endblock %}
